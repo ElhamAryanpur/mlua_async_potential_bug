@@ -1,0 +1,27 @@
+services:
+  # can change the permission of the folder
+  db:
+    image: postgres:16.3-alpine3.18
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+    shm_size: 250mb
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      PGUSER: postgres
+      POSTGRES_DB: database
+
+    deploy:
+      resources:
+        limits:
+          memory: 300M
